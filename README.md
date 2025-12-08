@@ -12,7 +12,8 @@ Beyond object detection, the system demonstrates how computer vision outputs can
 
 ---
 ## 📷 Results & Visualizations
-👉 **Watch here:** [![CityFlow AI Demo](https://drive.google.com/file/d/1hpNFu5CamWcfKmLmWS4PMGbeVpIoBnT7/view?usp=sharing)
+👉 **Watch here:** [![CityFlow AI Demo]](https://drive.google.com/file/d/1hpNFu5CamWcfKmLmWS4PMGbeVpIoBnT7/view?usp=sharing)
+
 Preview 
 
 <img width="1451" height="793" alt="image" src="https://github.com/user-attachments/assets/e8aa80f7-f929-4e72-bc2d-c616a8264d66" />
