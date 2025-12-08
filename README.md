@@ -12,11 +12,13 @@ Beyond object detection, the system demonstrates how computer vision outputs can
 
 ---
 ## 📷 Results & Visualizations
-👉 **Watch here:** [![CityFlow AI Demo]](https://drive.google.com/file/d/1hpNFu5CamWcfKmLmWS4PMGbeVpIoBnT7/view?usp=sharing)
+👉 **Watch here:** [CityFlow AI Demo](https://drive.google.com/file/d/1hpNFu5CamWcfKmLmWS4PMGbeVpIoBnT7/view?usp=sharing)
 
 Preview 
 
 <img width="1451" height="793" alt="image" src="https://github.com/user-attachments/assets/e8aa80f7-f929-4e72-bc2d-c616a8264d66" />
+
+
 
 <img width="1438" height="751" alt="image" src="https://github.com/user-attachments/assets/b1885974-ab6f-4c6a-ac8f-6246bb3030dc" />
 
@@ -97,7 +99,7 @@ Analytics (Counts, Flow Ratios, Density)
 
 ---
 
-### 6️⃣ Evaluation
+### Evaluation
 - **Detection Metrics**
   - Mean Average Precision (mAP)
   - Precision, Recall, F1-score
