@@ -17,11 +17,11 @@ Check main.ipynb or 👉 **Watch here:** [CityFlow AI Demo](https://drive.google
 
 Preview 
 
-<img width="100" height="400" padding-bottom="100" alt="image" src="https://github.com/user-attachments/assets/e8aa80f7-f929-4e72-bc2d-c616a8264d66" />
+<img width="1000" height="400" padding-bottom="100" alt="image" src="https://github.com/user-attachments/assets/e8aa80f7-f929-4e72-bc2d-c616a8264d66" />
 
 
 
-<img width="100" height="400" alt="image" src="https://github.com/user-attachments/assets/b1885974-ab6f-4c6a-ac8f-6246bb3030dc" />
+<img width="1000" height="400" alt="image" src="https://github.com/user-attachments/assets/b1885974-ab6f-4c6a-ac8f-6246bb3030dc" />
 
 ---
 
