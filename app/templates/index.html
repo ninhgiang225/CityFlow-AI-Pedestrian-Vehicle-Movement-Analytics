@@ -1,0 +1,220 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Smart Crossing Traffic Analyzer</title>
+    <style>
+        body {
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+            background: #f3f4f6;
+            margin: 0;
+            padding: 0;
+        }
+        .page {
+            max-width: 1000px;
+            margin: 30px auto;
+            padding: 0 16px 40px;
+        }
+        h1 {
+            text-align: center;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+        .subtitle {
+            text-align: center;
+            color: #6b7280;
+            margin-bottom: 24px;
+        }
+        .card {
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 8px 24px rgba(15, 23, 42, 0.06);
+            padding: 20px 24px;
+            margin-bottom: 24px;
+        }
+        .card h2 {
+            margin-top: 0;
+            font-size: 18px;
+            margin-bottom: 12px;
+        }
+        label {
+            display: block;
+            font-size: 14px;
+            font-weight: 600;
+            margin: 14px 0 6px;
+        }
+        input[type="file"],
+        input[type="number"],
+        input[type="text"] {
+            width: 100%;
+            padding: 9px 11px;
+            border-radius: 10px;
+            border: 1px solid #d1d5db;
+            font-size: 14px;
+            box-sizing: border-box;
+        }
+        input[type="checkbox"] {
+            margin-right: 6px;
+        }
+        .row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 18px;
+        }
+        .col-half {
+            flex: 1;
+            min-width: 260px;
+        }
+        button {
+            margin-top: 18px;
+            background: #2563eb;
+            border: none;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 999px;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+        button:hover {
+            background: #1d4ed8;
+        }
+        .preview-img {
+            max-width: 100%;
+            border-radius: 12px;
+            border: 1px solid #e5e7eb;
+        }
+        .pill {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 999px;
+            font-size: 12px;
+            background: #e5f3ff;
+            color: #1d4ed8;
+            margin-right: 6px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 14px;
+        }
+        th, td {
+            border-bottom: 1px solid #e5e7eb;
+            padding: 8px 6px;
+            text-align: left;
+        }
+        th {
+            font-weight: 600;
+            color: #4b5563;
+        }
+        .suggestion-box {
+            background: #f9fafb;
+            border-radius: 12px;
+            padding: 10px 12px;
+            border: 1px solid #e5e7eb;
+            font-size: 14px;
+        }
+        .metrics {
+            font-size: 14px;
+            color: #374151;
+        }
+    </style>
+</head>
+<body>
+<div class="page">
+    <h1>Smart Crossing Traffic Analyzer</h1>
+    <div class="subtitle">
+        Upload a crossing video + model. The system detects pedestrians & vehicles,<br>
+        estimates density, and suggests traffic-light timing adaptations.
+    </div>
+
+    <div class="card">
+        <h2>1. Upload & Configure</h2>
+        <form method="post" enctype="multipart/form-data">
+            <label>Crossing Video (MP4/AVI/etc.)</label>
+            <input type="file" name="video" required>
+
+            <label>YOLO Model (.pt) — optional (uses default if not provided)</label>
+            <input type="file" name="model">
+
+            <div class="row">
+                <div class="col-half">
+                    <label><input type="checkbox" name="preprocess"> Enable preprocessing</label>
+                    <label>Resize width (px, optional)</label>
+                    <input type="number" name="target_width" placeholder="e.g., 1280">
+
+                    <label>Sampling FPS (analysis rate)</label>
+                    <input type="number" name="sample_fps" value="5" step="1" min="1">
+                </div>
+                <div class="col-half">
+                    <label>Confidence threshold</label>
+                    <input type="text" name="conf_thresh" value="0.35" placeholder="0.35">
+
+                    <p style="font-size:13px;color:#6b7280;margin-top:16px;">
+                        Pedestrians counted as COCO class <code>person</code> (0).<br>
+                        Vehicles: bicycle, car, motorcycle, bus, truck.
+                    </p>
+                </div>
+            </div>
+
+            <button type="submit">Run Analysis</button>
+        </form>
+    </div>
+
+    {% if latest_run %}
+    <div class="card">
+        <h2>2. Latest Analysis Result</h2>
+        <div class="row">
+            <div class="col-half">
+                <span class="pill">People: {{ latest_run.people_count }}</span>
+                <span class="pill">Vehicles: {{ latest_run.vehicle_count }}</span>
+                <p class="metrics" style="margin-top:10px;">
+                    Frames sampled: {{ latest_run.summary.frames_sampled }}<br>
+                    Original FPS: {{ "%.2f"|format(latest_run.summary.orig_fps) }} |
+                    Sample FPS: {{ "%.2f"|format(latest_run.summary.sample_fps) }}
+                </p>
+                <div style="margin-top:10px;">
+                    <div class="suggestion-box">
+                        <strong>Traffic-light Suggestion:</strong><br>
+                        {{ latest_run.suggestion }}
+                    </div>
+                </div>
+            </div>
+            <div class="col-half">
+                <img src="{{ url_for('results_file', filename=latest_run.preview_file) }}"
+                     alt="Preview" class="preview-img">
+                <p style="font-size:13px;color:#6b7280;margin-top:6px;">
+                    Preview: detections + density heat overlay
+                </p>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+
+    <div class="card">
+        <h2>3. Recent Runs</h2>
+        {% if history %}
+        <table>
+            <tr>
+                <th>Time</th>
+                <th>People</th>
+                <th>Vehicles</th>
+                <th>Suggestion (short)</th>
+            </tr>
+            {% for r in history %}
+            <tr>
+                <td>{{ r.created_at }}</td>
+                <td>{{ r.people_count }}</td>
+                <td>{{ r.vehicle_count }}</td>
+                <td>{{ r.suggestion[:80] }}{% if r.suggestion|length > 80 %}…{% endif %}</td>
+            </tr>
+            {% endfor %}
+        </table>
+        {% else %}
+        <p style="font-size:14px;color:#6b7280;">No runs yet. Upload a video above to get started.</p>
+        {% endif %}
+    </div>
+
+</div>
+</body>
+</html>

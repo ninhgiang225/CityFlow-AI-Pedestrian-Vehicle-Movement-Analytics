@@ -1,0 +1,17 @@
+# OS
+.DS_Store
+
+# Database
+*.db
+instance/
+
+# Python
+__pycache__/
+*.pyc
+
+# Virtual env
+venv/
+env/
+
+# Jupyter checkpoints
+.ipynb_checkpoints/
